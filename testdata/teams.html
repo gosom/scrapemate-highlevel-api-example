@@ -1,0 +1,3976 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Hockey Teams: Forms, Searching and Pagination | Scrape This Site | A public sandbox for learning web scraping</title>
+    <link rel="icon" type="image/png" href="/static/images/scraper-icon.png" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Browse through a database of NHL team stats since 1990. Practice building a scraper that handles common website interface components.">
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-MfvZlkHCEqatNoGiOXveE8FIwMzZg4W85qfrfIFBfYc= sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
+
+    
+<meta name="robots" content="noindex">
+
+
+  </head>
+
+  <body>
+    <nav id="site-nav">
+            <div class="container">
+                <div class="col-md-12">
+                    <ul class="nav nav-tabs">
+                        <li id="nav-homepage">
+                            <a href="/" class="nav-link hidden-sm hidden-xs">
+                                <img src="/static/images/scraper-icon.png" id="nav-logo">
+                                Scrape This Site
+                            </a>
+                        </li>
+                        <li id="nav-sandbox">
+                            <a href="/pages/" class="nav-link">
+                                <i class="glyphicon glyphicon-console hidden-sm hidden-xs"></i>
+                                Sandbox
+                            </a>
+                        </li>
+                        <li id="nav-lessons">
+                            <a href="/lessons/" class="nav-link">
+                                <i class="glyphicon glyphicon-education hidden-sm hidden-xs"></i>
+                                Lessons
+                            </a>
+                        </li>
+                        <li id="nav-faq">
+                            <a href="/faq/" class="nav-link">
+                                <i class="glyphicon glyphicon-flag hidden-sm hidden-xs"></i>
+                                FAQ
+                            </a>
+                        </li>
+                        
+                        <li id="nav-login" class="pull-right">
+                            <a href="/login/" class="nav-link">
+                                Login
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <script type="text/javascript">
+            var path = document.location.pathname;
+            var tab = undefined;
+            if (path === "/"){
+                tab = document.querySelector("#nav-homepage");
+            } else if (path.indexOf("/faq/") === 0){
+                tab = document.querySelector("#nav-faq");
+            } else if (path.indexOf("/lessons/") === 0){
+                tab = document.querySelector("#nav-lessons");
+            } else if (path.indexOf("/pages/") === 0) {
+                tab = document.querySelector("#nav-sandbox");
+            } else if (path.indexOf("/login/") === 0) {
+                tab = document.querySelector("#nav-login");
+            }
+            tab.classList.add("active")
+        </script>
+
+    
+
+    <div id="page">
+
+        <section id="hockey">
+            <div class="container">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1>
+                            Hockey Teams: Forms, Searching and Pagination
+                            <small>100 items</small>
+                        </h1>
+                        <hr />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p class="lead">
+                            Browse through a database of NHL team stats since 1990. Practice building a scraper that handles common website interface components.
+                            Take a look at how pagination and search elements change the URL as your browse. Build a web scraper that can conduct searches and paginate through the results.
+                        </p>
+                        <hr />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>
+                            <i class="glyphicon glyphicon-education"></i> There are <a href="/lessons/">8 video lessons</a> that show you how to scrape this page.
+                        </p>
+                        <hr />
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <p>
+                            
+                                Data via
+                                <a href="http://www.opensourcesports.com/hockey/" class="data-attribution" target="_blank">http://www.opensourcesports.com/hockey/</a>
+                            
+                        </p>
+                        <hr />
+                    </div>
+                </div>
+
+                <div class="row search-area">
+                    <div class="col-md-12 text-center">
+                        <form method="GET" action="/pages/forms/" class="form form-inline">
+                            <label for="q">
+                                Search for Teams: &nbsp;
+                            </label>
+                            <input type="text" class="form-control" name="q" id="q" placeholder="Search for Teams" />
+                            
+                                <input type="hidden" name="per_page" value="100" />
+                            
+                            <input type="submit" class="btn btn-primary" value="Search" />
+                        </form>
+                        <hr>
+                    </div>
+                </div><!--.row.search-area-->
+
+
+                <table class="table">
+                    <tr>
+                        <th>
+                            Team Name
+                        </th>
+                        <th>
+                            Year
+                        </th>
+                        <th>
+                            Wins
+                        </th>
+                        <th>
+                            Losses
+                        </th>
+                        <th>
+                            OT Losses
+                        </th>
+                        <th>
+                            Win %
+                        </th>
+                        <th>
+                            Goals For (GF)
+                        </th>
+                        <th>
+                            Goals Against (GA)
+                        </th>
+                        <th>
+                            + / -
+                        </th>
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Boston Bruins
+                        </td>
+                        <td class="year">
+                            1990
+                        </td>
+                        <td class="wins">
+                            44
+                        </td>
+                        <td class="losses">
+                            24
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-success">
+                            0.55
+                        </td>
+                        
+                        <td class="gf">
+                            299
+                        </td>
+                        <td class="ga">
+                            264
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            35
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Buffalo Sabres
+                        </td>
+                        <td class="year">
+                            1990
+                        </td>
+                        <td class="wins">
+                            31
+                        </td>
+                        <td class="losses">
+                            30
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.388
+                        </td>
+                        
+                        <td class="gf">
+                            292
+                        </td>
+                        <td class="ga">
+                            278
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            14
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Calgary Flames
+                        </td>
+                        <td class="year">
+                            1990
+                        </td>
+                        <td class="wins">
+                            46
+                        </td>
+                        <td class="losses">
+                            26
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-success">
+                            0.575
+                        </td>
+                        
+                        <td class="gf">
+                            344
+                        </td>
+                        <td class="ga">
+                            263
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            81
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Chicago Blackhawks
+                        </td>
+                        <td class="year">
+                            1990
+                        </td>
+                        <td class="wins">
+                            49
+                        </td>
+                        <td class="losses">
+                            23
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-success">
+                            0.613
+                        </td>
+                        
+                        <td class="gf">
+                            284
+                        </td>
+                        <td class="ga">
+                            211
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            73
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Detroit Red Wings
+                        </td>
+                        <td class="year">
+                            1990
+                        </td>
+                        <td class="wins">
+                            34
+                        </td>
+                        <td class="losses">
+                            38
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.425
+                        </td>
+                        
+                        <td class="gf">
+                            273
+                        </td>
+                        <td class="ga">
+                            298
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -25
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Edmonton Oilers
+                        </td>
+                        <td class="year">
+                            1990
+                        </td>
+                        <td class="wins">
+                            37
+                        </td>
+                        <td class="losses">
+                            37
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.463
+                        </td>
+                        
+                        <td class="gf">
+                            272
+                        </td>
+                        <td class="ga">
+                            272
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            0
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Hartford Whalers
+                        </td>
+                        <td class="year">
+                            1990
+                        </td>
+                        <td class="wins">
+                            31
+                        </td>
+                        <td class="losses">
+                            38
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.388
+                        </td>
+                        
+                        <td class="gf">
+                            238
+                        </td>
+                        <td class="ga">
+                            276
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -38
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Los Angeles Kings
+                        </td>
+                        <td class="year">
+                            1990
+                        </td>
+                        <td class="wins">
+                            46
+                        </td>
+                        <td class="losses">
+                            24
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-success">
+                            0.575
+                        </td>
+                        
+                        <td class="gf">
+                            340
+                        </td>
+                        <td class="ga">
+                            254
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            86
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Minnesota North Stars
+                        </td>
+                        <td class="year">
+                            1990
+                        </td>
+                        <td class="wins">
+                            27
+                        </td>
+                        <td class="losses">
+                            39
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.338
+                        </td>
+                        
+                        <td class="gf">
+                            256
+                        </td>
+                        <td class="ga">
+                            266
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -10
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Montreal Canadiens
+                        </td>
+                        <td class="year">
+                            1990
+                        </td>
+                        <td class="wins">
+                            39
+                        </td>
+                        <td class="losses">
+                            30
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.487
+                        </td>
+                        
+                        <td class="gf">
+                            273
+                        </td>
+                        <td class="ga">
+                            249
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            24
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            New Jersey Devils
+                        </td>
+                        <td class="year">
+                            1990
+                        </td>
+                        <td class="wins">
+                            32
+                        </td>
+                        <td class="losses">
+                            33
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.4
+                        </td>
+                        
+                        <td class="gf">
+                            272
+                        </td>
+                        <td class="ga">
+                            264
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            8
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            New York Islanders
+                        </td>
+                        <td class="year">
+                            1990
+                        </td>
+                        <td class="wins">
+                            25
+                        </td>
+                        <td class="losses">
+                            45
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.312
+                        </td>
+                        
+                        <td class="gf">
+                            223
+                        </td>
+                        <td class="ga">
+                            290
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -67
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            New York Rangers
+                        </td>
+                        <td class="year">
+                            1990
+                        </td>
+                        <td class="wins">
+                            36
+                        </td>
+                        <td class="losses">
+                            31
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.45
+                        </td>
+                        
+                        <td class="gf">
+                            297
+                        </td>
+                        <td class="ga">
+                            265
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            32
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Philadelphia Flyers
+                        </td>
+                        <td class="year">
+                            1990
+                        </td>
+                        <td class="wins">
+                            33
+                        </td>
+                        <td class="losses">
+                            37
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.412
+                        </td>
+                        
+                        <td class="gf">
+                            252
+                        </td>
+                        <td class="ga">
+                            267
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -15
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Pittsburgh Penguins
+                        </td>
+                        <td class="year">
+                            1990
+                        </td>
+                        <td class="wins">
+                            41
+                        </td>
+                        <td class="losses">
+                            33
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-success">
+                            0.512
+                        </td>
+                        
+                        <td class="gf">
+                            342
+                        </td>
+                        <td class="ga">
+                            305
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            37
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Quebec Nordiques
+                        </td>
+                        <td class="year">
+                            1990
+                        </td>
+                        <td class="wins">
+                            16
+                        </td>
+                        <td class="losses">
+                            50
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.2
+                        </td>
+                        
+                        <td class="gf">
+                            236
+                        </td>
+                        <td class="ga">
+                            354
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -118
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            St. Louis Blues
+                        </td>
+                        <td class="year">
+                            1990
+                        </td>
+                        <td class="wins">
+                            47
+                        </td>
+                        <td class="losses">
+                            22
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-success">
+                            0.588
+                        </td>
+                        
+                        <td class="gf">
+                            310
+                        </td>
+                        <td class="ga">
+                            250
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            60
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Toronto Maple Leafs
+                        </td>
+                        <td class="year">
+                            1990
+                        </td>
+                        <td class="wins">
+                            23
+                        </td>
+                        <td class="losses">
+                            46
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.287
+                        </td>
+                        
+                        <td class="gf">
+                            241
+                        </td>
+                        <td class="ga">
+                            318
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -77
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Vancouver Canucks
+                        </td>
+                        <td class="year">
+                            1990
+                        </td>
+                        <td class="wins">
+                            28
+                        </td>
+                        <td class="losses">
+                            43
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.35
+                        </td>
+                        
+                        <td class="gf">
+                            243
+                        </td>
+                        <td class="ga">
+                            315
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -72
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Washington Capitals
+                        </td>
+                        <td class="year">
+                            1990
+                        </td>
+                        <td class="wins">
+                            37
+                        </td>
+                        <td class="losses">
+                            36
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.463
+                        </td>
+                        
+                        <td class="gf">
+                            258
+                        </td>
+                        <td class="ga">
+                            258
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            0
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Winnipeg Jets
+                        </td>
+                        <td class="year">
+                            1990
+                        </td>
+                        <td class="wins">
+                            26
+                        </td>
+                        <td class="losses">
+                            43
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.325
+                        </td>
+                        
+                        <td class="gf">
+                            260
+                        </td>
+                        <td class="ga">
+                            288
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -28
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Boston Bruins
+                        </td>
+                        <td class="year">
+                            1991
+                        </td>
+                        <td class="wins">
+                            36
+                        </td>
+                        <td class="losses">
+                            32
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.45
+                        </td>
+                        
+                        <td class="gf">
+                            270
+                        </td>
+                        <td class="ga">
+                            275
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -5
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Buffalo Sabres
+                        </td>
+                        <td class="year">
+                            1991
+                        </td>
+                        <td class="wins">
+                            31
+                        </td>
+                        <td class="losses">
+                            37
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.388
+                        </td>
+                        
+                        <td class="gf">
+                            289
+                        </td>
+                        <td class="ga">
+                            299
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -10
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Calgary Flames
+                        </td>
+                        <td class="year">
+                            1991
+                        </td>
+                        <td class="wins">
+                            31
+                        </td>
+                        <td class="losses">
+                            37
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.388
+                        </td>
+                        
+                        <td class="gf">
+                            296
+                        </td>
+                        <td class="ga">
+                            305
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -9
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Chicago Blackhawks
+                        </td>
+                        <td class="year">
+                            1991
+                        </td>
+                        <td class="wins">
+                            36
+                        </td>
+                        <td class="losses">
+                            29
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.45
+                        </td>
+                        
+                        <td class="gf">
+                            257
+                        </td>
+                        <td class="ga">
+                            236
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            21
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Detroit Red Wings
+                        </td>
+                        <td class="year">
+                            1991
+                        </td>
+                        <td class="wins">
+                            43
+                        </td>
+                        <td class="losses">
+                            25
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-success">
+                            0.537
+                        </td>
+                        
+                        <td class="gf">
+                            320
+                        </td>
+                        <td class="ga">
+                            256
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            64
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Edmonton Oilers
+                        </td>
+                        <td class="year">
+                            1991
+                        </td>
+                        <td class="wins">
+                            36
+                        </td>
+                        <td class="losses">
+                            34
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.45
+                        </td>
+                        
+                        <td class="gf">
+                            295
+                        </td>
+                        <td class="ga">
+                            297
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -2
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Hartford Whalers
+                        </td>
+                        <td class="year">
+                            1991
+                        </td>
+                        <td class="wins">
+                            26
+                        </td>
+                        <td class="losses">
+                            41
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.325
+                        </td>
+                        
+                        <td class="gf">
+                            247
+                        </td>
+                        <td class="ga">
+                            283
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -36
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Los Angeles Kings
+                        </td>
+                        <td class="year">
+                            1991
+                        </td>
+                        <td class="wins">
+                            35
+                        </td>
+                        <td class="losses">
+                            31
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.438
+                        </td>
+                        
+                        <td class="gf">
+                            287
+                        </td>
+                        <td class="ga">
+                            296
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -9
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Minnesota North Stars
+                        </td>
+                        <td class="year">
+                            1991
+                        </td>
+                        <td class="wins">
+                            32
+                        </td>
+                        <td class="losses">
+                            42
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.4
+                        </td>
+                        
+                        <td class="gf">
+                            246
+                        </td>
+                        <td class="ga">
+                            278
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -32
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Montreal Canadiens
+                        </td>
+                        <td class="year">
+                            1991
+                        </td>
+                        <td class="wins">
+                            41
+                        </td>
+                        <td class="losses">
+                            28
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-success">
+                            0.512
+                        </td>
+                        
+                        <td class="gf">
+                            267
+                        </td>
+                        <td class="ga">
+                            207
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            60
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            New Jersey Devils
+                        </td>
+                        <td class="year">
+                            1991
+                        </td>
+                        <td class="wins">
+                            38
+                        </td>
+                        <td class="losses">
+                            31
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.475
+                        </td>
+                        
+                        <td class="gf">
+                            289
+                        </td>
+                        <td class="ga">
+                            259
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            30
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            New York Islanders
+                        </td>
+                        <td class="year">
+                            1991
+                        </td>
+                        <td class="wins">
+                            34
+                        </td>
+                        <td class="losses">
+                            35
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.425
+                        </td>
+                        
+                        <td class="gf">
+                            291
+                        </td>
+                        <td class="ga">
+                            299
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -8
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            New York Rangers
+                        </td>
+                        <td class="year">
+                            1991
+                        </td>
+                        <td class="wins">
+                            50
+                        </td>
+                        <td class="losses">
+                            25
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-success">
+                            0.625
+                        </td>
+                        
+                        <td class="gf">
+                            321
+                        </td>
+                        <td class="ga">
+                            246
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            75
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Philadelphia Flyers
+                        </td>
+                        <td class="year">
+                            1991
+                        </td>
+                        <td class="wins">
+                            32
+                        </td>
+                        <td class="losses">
+                            37
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.4
+                        </td>
+                        
+                        <td class="gf">
+                            252
+                        </td>
+                        <td class="ga">
+                            273
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -21
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Pittsburgh Penguins
+                        </td>
+                        <td class="year">
+                            1991
+                        </td>
+                        <td class="wins">
+                            39
+                        </td>
+                        <td class="losses">
+                            32
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.487
+                        </td>
+                        
+                        <td class="gf">
+                            343
+                        </td>
+                        <td class="ga">
+                            308
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            35
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Quebec Nordiques
+                        </td>
+                        <td class="year">
+                            1991
+                        </td>
+                        <td class="wins">
+                            20
+                        </td>
+                        <td class="losses">
+                            48
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.25
+                        </td>
+                        
+                        <td class="gf">
+                            255
+                        </td>
+                        <td class="ga">
+                            318
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -63
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            San Jose Sharks
+                        </td>
+                        <td class="year">
+                            1991
+                        </td>
+                        <td class="wins">
+                            17
+                        </td>
+                        <td class="losses">
+                            58
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.212
+                        </td>
+                        
+                        <td class="gf">
+                            219
+                        </td>
+                        <td class="ga">
+                            359
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -140
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            St. Louis Blues
+                        </td>
+                        <td class="year">
+                            1991
+                        </td>
+                        <td class="wins">
+                            36
+                        </td>
+                        <td class="losses">
+                            33
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.45
+                        </td>
+                        
+                        <td class="gf">
+                            279
+                        </td>
+                        <td class="ga">
+                            266
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            13
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Toronto Maple Leafs
+                        </td>
+                        <td class="year">
+                            1991
+                        </td>
+                        <td class="wins">
+                            30
+                        </td>
+                        <td class="losses">
+                            43
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.375
+                        </td>
+                        
+                        <td class="gf">
+                            234
+                        </td>
+                        <td class="ga">
+                            294
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -60
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Vancouver Canucks
+                        </td>
+                        <td class="year">
+                            1991
+                        </td>
+                        <td class="wins">
+                            42
+                        </td>
+                        <td class="losses">
+                            26
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-success">
+                            0.525
+                        </td>
+                        
+                        <td class="gf">
+                            285
+                        </td>
+                        <td class="ga">
+                            250
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            35
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Washington Capitals
+                        </td>
+                        <td class="year">
+                            1991
+                        </td>
+                        <td class="wins">
+                            45
+                        </td>
+                        <td class="losses">
+                            27
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-success">
+                            0.562
+                        </td>
+                        
+                        <td class="gf">
+                            330
+                        </td>
+                        <td class="ga">
+                            275
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            55
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Winnipeg Jets
+                        </td>
+                        <td class="year">
+                            1991
+                        </td>
+                        <td class="wins">
+                            33
+                        </td>
+                        <td class="losses">
+                            32
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.412
+                        </td>
+                        
+                        <td class="gf">
+                            251
+                        </td>
+                        <td class="ga">
+                            244
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            7
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Boston Bruins
+                        </td>
+                        <td class="year">
+                            1992
+                        </td>
+                        <td class="wins">
+                            51
+                        </td>
+                        <td class="losses">
+                            26
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-success">
+                            0.607
+                        </td>
+                        
+                        <td class="gf">
+                            332
+                        </td>
+                        <td class="ga">
+                            268
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            64
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Buffalo Sabres
+                        </td>
+                        <td class="year">
+                            1992
+                        </td>
+                        <td class="wins">
+                            38
+                        </td>
+                        <td class="losses">
+                            36
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.452
+                        </td>
+                        
+                        <td class="gf">
+                            335
+                        </td>
+                        <td class="ga">
+                            297
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            38
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Calgary Flames
+                        </td>
+                        <td class="year">
+                            1992
+                        </td>
+                        <td class="wins">
+                            43
+                        </td>
+                        <td class="losses">
+                            30
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-success">
+                            0.512
+                        </td>
+                        
+                        <td class="gf">
+                            322
+                        </td>
+                        <td class="ga">
+                            282
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            40
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Chicago Blackhawks
+                        </td>
+                        <td class="year">
+                            1992
+                        </td>
+                        <td class="wins">
+                            47
+                        </td>
+                        <td class="losses">
+                            25
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-success">
+                            0.56
+                        </td>
+                        
+                        <td class="gf">
+                            279
+                        </td>
+                        <td class="ga">
+                            230
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            49
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Detroit Red Wings
+                        </td>
+                        <td class="year">
+                            1992
+                        </td>
+                        <td class="wins">
+                            47
+                        </td>
+                        <td class="losses">
+                            28
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-success">
+                            0.56
+                        </td>
+                        
+                        <td class="gf">
+                            369
+                        </td>
+                        <td class="ga">
+                            280
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            89
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Edmonton Oilers
+                        </td>
+                        <td class="year">
+                            1992
+                        </td>
+                        <td class="wins">
+                            26
+                        </td>
+                        <td class="losses">
+                            50
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.31
+                        </td>
+                        
+                        <td class="gf">
+                            242
+                        </td>
+                        <td class="ga">
+                            337
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -95
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Hartford Whalers
+                        </td>
+                        <td class="year">
+                            1992
+                        </td>
+                        <td class="wins">
+                            26
+                        </td>
+                        <td class="losses">
+                            52
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.31
+                        </td>
+                        
+                        <td class="gf">
+                            284
+                        </td>
+                        <td class="ga">
+                            369
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -85
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Los Angeles Kings
+                        </td>
+                        <td class="year">
+                            1992
+                        </td>
+                        <td class="wins">
+                            39
+                        </td>
+                        <td class="losses">
+                            35
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.464
+                        </td>
+                        
+                        <td class="gf">
+                            338
+                        </td>
+                        <td class="ga">
+                            340
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -2
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Minnesota North Stars
+                        </td>
+                        <td class="year">
+                            1992
+                        </td>
+                        <td class="wins">
+                            36
+                        </td>
+                        <td class="losses">
+                            38
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.429
+                        </td>
+                        
+                        <td class="gf">
+                            272
+                        </td>
+                        <td class="ga">
+                            293
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -21
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Montreal Canadiens
+                        </td>
+                        <td class="year">
+                            1992
+                        </td>
+                        <td class="wins">
+                            48
+                        </td>
+                        <td class="losses">
+                            30
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-success">
+                            0.571
+                        </td>
+                        
+                        <td class="gf">
+                            326
+                        </td>
+                        <td class="ga">
+                            280
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            46
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            New Jersey Devils
+                        </td>
+                        <td class="year">
+                            1992
+                        </td>
+                        <td class="wins">
+                            40
+                        </td>
+                        <td class="losses">
+                            37
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.476
+                        </td>
+                        
+                        <td class="gf">
+                            308
+                        </td>
+                        <td class="ga">
+                            299
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            9
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            New York Islanders
+                        </td>
+                        <td class="year">
+                            1992
+                        </td>
+                        <td class="wins">
+                            40
+                        </td>
+                        <td class="losses">
+                            37
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.476
+                        </td>
+                        
+                        <td class="gf">
+                            335
+                        </td>
+                        <td class="ga">
+                            297
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            38
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            New York Rangers
+                        </td>
+                        <td class="year">
+                            1992
+                        </td>
+                        <td class="wins">
+                            34
+                        </td>
+                        <td class="losses">
+                            39
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.405
+                        </td>
+                        
+                        <td class="gf">
+                            304
+                        </td>
+                        <td class="ga">
+                            308
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -4
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Ottawa Senators
+                        </td>
+                        <td class="year">
+                            1992
+                        </td>
+                        <td class="wins">
+                            10
+                        </td>
+                        <td class="losses">
+                            70
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.119
+                        </td>
+                        
+                        <td class="gf">
+                            202
+                        </td>
+                        <td class="ga">
+                            395
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -193
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Philadelphia Flyers
+                        </td>
+                        <td class="year">
+                            1992
+                        </td>
+                        <td class="wins">
+                            36
+                        </td>
+                        <td class="losses">
+                            37
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.429
+                        </td>
+                        
+                        <td class="gf">
+                            319
+                        </td>
+                        <td class="ga">
+                            319
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            0
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Pittsburgh Penguins
+                        </td>
+                        <td class="year">
+                            1992
+                        </td>
+                        <td class="wins">
+                            56
+                        </td>
+                        <td class="losses">
+                            21
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-success">
+                            0.667
+                        </td>
+                        
+                        <td class="gf">
+                            367
+                        </td>
+                        <td class="ga">
+                            268
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            99
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Quebec Nordiques
+                        </td>
+                        <td class="year">
+                            1992
+                        </td>
+                        <td class="wins">
+                            47
+                        </td>
+                        <td class="losses">
+                            27
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-success">
+                            0.56
+                        </td>
+                        
+                        <td class="gf">
+                            351
+                        </td>
+                        <td class="ga">
+                            300
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            51
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            San Jose Sharks
+                        </td>
+                        <td class="year">
+                            1992
+                        </td>
+                        <td class="wins">
+                            11
+                        </td>
+                        <td class="losses">
+                            71
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.131
+                        </td>
+                        
+                        <td class="gf">
+                            218
+                        </td>
+                        <td class="ga">
+                            414
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -196
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            St. Louis Blues
+                        </td>
+                        <td class="year">
+                            1992
+                        </td>
+                        <td class="wins">
+                            37
+                        </td>
+                        <td class="losses">
+                            36
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.44
+                        </td>
+                        
+                        <td class="gf">
+                            282
+                        </td>
+                        <td class="ga">
+                            278
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            4
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Tampa Bay Lightning
+                        </td>
+                        <td class="year">
+                            1992
+                        </td>
+                        <td class="wins">
+                            23
+                        </td>
+                        <td class="losses">
+                            54
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.274
+                        </td>
+                        
+                        <td class="gf">
+                            245
+                        </td>
+                        <td class="ga">
+                            332
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -87
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Toronto Maple Leafs
+                        </td>
+                        <td class="year">
+                            1992
+                        </td>
+                        <td class="wins">
+                            44
+                        </td>
+                        <td class="losses">
+                            29
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-success">
+                            0.524
+                        </td>
+                        
+                        <td class="gf">
+                            288
+                        </td>
+                        <td class="ga">
+                            241
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            47
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Vancouver Canucks
+                        </td>
+                        <td class="year">
+                            1992
+                        </td>
+                        <td class="wins">
+                            46
+                        </td>
+                        <td class="losses">
+                            29
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-success">
+                            0.548
+                        </td>
+                        
+                        <td class="gf">
+                            346
+                        </td>
+                        <td class="ga">
+                            278
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            68
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Washington Capitals
+                        </td>
+                        <td class="year">
+                            1992
+                        </td>
+                        <td class="wins">
+                            43
+                        </td>
+                        <td class="losses">
+                            34
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-success">
+                            0.512
+                        </td>
+                        
+                        <td class="gf">
+                            325
+                        </td>
+                        <td class="ga">
+                            286
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            39
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Winnipeg Jets
+                        </td>
+                        <td class="year">
+                            1992
+                        </td>
+                        <td class="wins">
+                            40
+                        </td>
+                        <td class="losses">
+                            37
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.476
+                        </td>
+                        
+                        <td class="gf">
+                            322
+                        </td>
+                        <td class="ga">
+                            320
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            2
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Mighty Ducks of Anaheim
+                        </td>
+                        <td class="year">
+                            1993
+                        </td>
+                        <td class="wins">
+                            33
+                        </td>
+                        <td class="losses">
+                            46
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.393
+                        </td>
+                        
+                        <td class="gf">
+                            229
+                        </td>
+                        <td class="ga">
+                            251
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -22
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Boston Bruins
+                        </td>
+                        <td class="year">
+                            1993
+                        </td>
+                        <td class="wins">
+                            42
+                        </td>
+                        <td class="losses">
+                            29
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-success">
+                            0.5
+                        </td>
+                        
+                        <td class="gf">
+                            289
+                        </td>
+                        <td class="ga">
+                            252
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            37
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Buffalo Sabres
+                        </td>
+                        <td class="year">
+                            1993
+                        </td>
+                        <td class="wins">
+                            43
+                        </td>
+                        <td class="losses">
+                            32
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-success">
+                            0.512
+                        </td>
+                        
+                        <td class="gf">
+                            282
+                        </td>
+                        <td class="ga">
+                            218
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            64
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Calgary Flames
+                        </td>
+                        <td class="year">
+                            1993
+                        </td>
+                        <td class="wins">
+                            42
+                        </td>
+                        <td class="losses">
+                            29
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-success">
+                            0.5
+                        </td>
+                        
+                        <td class="gf">
+                            302
+                        </td>
+                        <td class="ga">
+                            256
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            46
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Chicago Blackhawks
+                        </td>
+                        <td class="year">
+                            1993
+                        </td>
+                        <td class="wins">
+                            39
+                        </td>
+                        <td class="losses">
+                            36
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.464
+                        </td>
+                        
+                        <td class="gf">
+                            254
+                        </td>
+                        <td class="ga">
+                            240
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            14
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Dallas Stars
+                        </td>
+                        <td class="year">
+                            1993
+                        </td>
+                        <td class="wins">
+                            42
+                        </td>
+                        <td class="losses">
+                            29
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-success">
+                            0.5
+                        </td>
+                        
+                        <td class="gf">
+                            286
+                        </td>
+                        <td class="ga">
+                            265
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            21
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Detroit Red Wings
+                        </td>
+                        <td class="year">
+                            1993
+                        </td>
+                        <td class="wins">
+                            46
+                        </td>
+                        <td class="losses">
+                            30
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-success">
+                            0.548
+                        </td>
+                        
+                        <td class="gf">
+                            356
+                        </td>
+                        <td class="ga">
+                            275
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            81
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Edmonton Oilers
+                        </td>
+                        <td class="year">
+                            1993
+                        </td>
+                        <td class="wins">
+                            25
+                        </td>
+                        <td class="losses">
+                            45
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.298
+                        </td>
+                        
+                        <td class="gf">
+                            261
+                        </td>
+                        <td class="ga">
+                            305
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -44
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Florida Panthers
+                        </td>
+                        <td class="year">
+                            1993
+                        </td>
+                        <td class="wins">
+                            33
+                        </td>
+                        <td class="losses">
+                            34
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.393
+                        </td>
+                        
+                        <td class="gf">
+                            233
+                        </td>
+                        <td class="ga">
+                            233
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            0
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Hartford Whalers
+                        </td>
+                        <td class="year">
+                            1993
+                        </td>
+                        <td class="wins">
+                            27
+                        </td>
+                        <td class="losses">
+                            48
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.321
+                        </td>
+                        
+                        <td class="gf">
+                            227
+                        </td>
+                        <td class="ga">
+                            288
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -61
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Los Angeles Kings
+                        </td>
+                        <td class="year">
+                            1993
+                        </td>
+                        <td class="wins">
+                            27
+                        </td>
+                        <td class="losses">
+                            45
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.321
+                        </td>
+                        
+                        <td class="gf">
+                            294
+                        </td>
+                        <td class="ga">
+                            322
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -28
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Montreal Canadiens
+                        </td>
+                        <td class="year">
+                            1993
+                        </td>
+                        <td class="wins">
+                            41
+                        </td>
+                        <td class="losses">
+                            29
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.488
+                        </td>
+                        
+                        <td class="gf">
+                            283
+                        </td>
+                        <td class="ga">
+                            248
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            35
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            New Jersey Devils
+                        </td>
+                        <td class="year">
+                            1993
+                        </td>
+                        <td class="wins">
+                            47
+                        </td>
+                        <td class="losses">
+                            25
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-success">
+                            0.56
+                        </td>
+                        
+                        <td class="gf">
+                            306
+                        </td>
+                        <td class="ga">
+                            220
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            86
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            New York Islanders
+                        </td>
+                        <td class="year">
+                            1993
+                        </td>
+                        <td class="wins">
+                            36
+                        </td>
+                        <td class="losses">
+                            36
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.429
+                        </td>
+                        
+                        <td class="gf">
+                            282
+                        </td>
+                        <td class="ga">
+                            264
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            18
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            New York Rangers
+                        </td>
+                        <td class="year">
+                            1993
+                        </td>
+                        <td class="wins">
+                            52
+                        </td>
+                        <td class="losses">
+                            24
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-success">
+                            0.619
+                        </td>
+                        
+                        <td class="gf">
+                            299
+                        </td>
+                        <td class="ga">
+                            231
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            68
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Ottawa Senators
+                        </td>
+                        <td class="year">
+                            1993
+                        </td>
+                        <td class="wins">
+                            14
+                        </td>
+                        <td class="losses">
+                            61
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.167
+                        </td>
+                        
+                        <td class="gf">
+                            201
+                        </td>
+                        <td class="ga">
+                            397
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -196
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Philadelphia Flyers
+                        </td>
+                        <td class="year">
+                            1993
+                        </td>
+                        <td class="wins">
+                            35
+                        </td>
+                        <td class="losses">
+                            39
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.417
+                        </td>
+                        
+                        <td class="gf">
+                            294
+                        </td>
+                        <td class="ga">
+                            314
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -20
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Pittsburgh Penguins
+                        </td>
+                        <td class="year">
+                            1993
+                        </td>
+                        <td class="wins">
+                            44
+                        </td>
+                        <td class="losses">
+                            27
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-success">
+                            0.524
+                        </td>
+                        
+                        <td class="gf">
+                            299
+                        </td>
+                        <td class="ga">
+                            285
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            14
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Quebec Nordiques
+                        </td>
+                        <td class="year">
+                            1993
+                        </td>
+                        <td class="wins">
+                            34
+                        </td>
+                        <td class="losses">
+                            42
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.405
+                        </td>
+                        
+                        <td class="gf">
+                            277
+                        </td>
+                        <td class="ga">
+                            292
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -15
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            San Jose Sharks
+                        </td>
+                        <td class="year">
+                            1993
+                        </td>
+                        <td class="wins">
+                            33
+                        </td>
+                        <td class="losses">
+                            35
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.393
+                        </td>
+                        
+                        <td class="gf">
+                            252
+                        </td>
+                        <td class="ga">
+                            265
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -13
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            St. Louis Blues
+                        </td>
+                        <td class="year">
+                            1993
+                        </td>
+                        <td class="wins">
+                            40
+                        </td>
+                        <td class="losses">
+                            33
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.476
+                        </td>
+                        
+                        <td class="gf">
+                            270
+                        </td>
+                        <td class="ga">
+                            283
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -13
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Tampa Bay Lightning
+                        </td>
+                        <td class="year">
+                            1993
+                        </td>
+                        <td class="wins">
+                            30
+                        </td>
+                        <td class="losses">
+                            43
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.357
+                        </td>
+                        
+                        <td class="gf">
+                            224
+                        </td>
+                        <td class="ga">
+                            251
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -27
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Toronto Maple Leafs
+                        </td>
+                        <td class="year">
+                            1993
+                        </td>
+                        <td class="wins">
+                            43
+                        </td>
+                        <td class="losses">
+                            29
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-success">
+                            0.512
+                        </td>
+                        
+                        <td class="gf">
+                            280
+                        </td>
+                        <td class="ga">
+                            243
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            37
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Vancouver Canucks
+                        </td>
+                        <td class="year">
+                            1993
+                        </td>
+                        <td class="wins">
+                            41
+                        </td>
+                        <td class="losses">
+                            40
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.488
+                        </td>
+                        
+                        <td class="gf">
+                            279
+                        </td>
+                        <td class="ga">
+                            276
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            3
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Washington Capitals
+                        </td>
+                        <td class="year">
+                            1993
+                        </td>
+                        <td class="wins">
+                            39
+                        </td>
+                        <td class="losses">
+                            35
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.464
+                        </td>
+                        
+                        <td class="gf">
+                            277
+                        </td>
+                        <td class="ga">
+                            263
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            14
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Winnipeg Jets
+                        </td>
+                        <td class="year">
+                            1993
+                        </td>
+                        <td class="wins">
+                            24
+                        </td>
+                        <td class="losses">
+                            51
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.286
+                        </td>
+                        
+                        <td class="gf">
+                            245
+                        </td>
+                        <td class="ga">
+                            344
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -99
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Mighty Ducks of Anaheim
+                        </td>
+                        <td class="year">
+                            1994
+                        </td>
+                        <td class="wins">
+                            16
+                        </td>
+                        <td class="losses">
+                            27
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.333
+                        </td>
+                        
+                        <td class="gf">
+                            125
+                        </td>
+                        <td class="ga">
+                            164
+                        </td>
+                        
+                        
+                        <td class="diff text-danger">
+                            -39
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Boston Bruins
+                        </td>
+                        <td class="year">
+                            1994
+                        </td>
+                        <td class="wins">
+                            27
+                        </td>
+                        <td class="losses">
+                            18
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-success">
+                            0.562
+                        </td>
+                        
+                        <td class="gf">
+                            150
+                        </td>
+                        <td class="ga">
+                            127
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            23
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Buffalo Sabres
+                        </td>
+                        <td class="year">
+                            1994
+                        </td>
+                        <td class="wins">
+                            22
+                        </td>
+                        <td class="losses">
+                            19
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.458
+                        </td>
+                        
+                        <td class="gf">
+                            130
+                        </td>
+                        <td class="ga">
+                            119
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            11
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Calgary Flames
+                        </td>
+                        <td class="year">
+                            1994
+                        </td>
+                        <td class="wins">
+                            24
+                        </td>
+                        <td class="losses">
+                            17
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-success">
+                            0.5
+                        </td>
+                        
+                        <td class="gf">
+                            163
+                        </td>
+                        <td class="ga">
+                            135
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            28
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Chicago Blackhawks
+                        </td>
+                        <td class="year">
+                            1994
+                        </td>
+                        <td class="wins">
+                            24
+                        </td>
+                        <td class="losses">
+                            19
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-success">
+                            0.5
+                        </td>
+                        
+                        <td class="gf">
+                            156
+                        </td>
+                        <td class="ga">
+                            115
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            41
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Dallas Stars
+                        </td>
+                        <td class="year">
+                            1994
+                        </td>
+                        <td class="wins">
+                            17
+                        </td>
+                        <td class="losses">
+                            23
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-danger">
+                            0.354
+                        </td>
+                        
+                        <td class="gf">
+                            136
+                        </td>
+                        <td class="ga">
+                            135
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            1
+                        </td>
+                        
+                    </tr>
+                    
+                    <tr class="team">
+                        <td class="name">
+                            Detroit Red Wings
+                        </td>
+                        <td class="year">
+                            1994
+                        </td>
+                        <td class="wins">
+                            33
+                        </td>
+                        <td class="losses">
+                            11
+                        </td>
+                        <td class="ot-losses">
+                            
+                        </td>
+                        
+                        
+                        <td class="pct text-success">
+                            0.688
+                        </td>
+                        
+                        <td class="gf">
+                            180
+                        </td>
+                        <td class="ga">
+                            117
+                        </td>
+                        
+                        
+                        <td class="diff text-success">
+                            63
+                        </td>
+                        
+                    </tr>
+                    
+                </table>
+
+
+
+                <div class="row pagination-area">
+                    <div class="col-md-10 text-center">
+                        <ul class="pagination">
+                            
+                            
+                            <li>
+                                <a href="/pages/forms/?page_num=1&per_page=100">
+                                    <strong>
+                                    1
+                                    </strong>
+                                </a>
+                            </li>
+                            
+                            <li>
+                                <a href="/pages/forms/?page_num=2&per_page=100">
+                                    
+                                    2
+                                    
+                                </a>
+                            </li>
+                            
+                            <li>
+                                <a href="/pages/forms/?page_num=3&per_page=100">
+                                    
+                                    3
+                                    
+                                </a>
+                            </li>
+                            
+                            <li>
+                                <a href="/pages/forms/?page_num=4&per_page=100">
+                                    
+                                    4
+                                    
+                                </a>
+                            </li>
+                            
+                            <li>
+                                <a href="/pages/forms/?page_num=5&per_page=100">
+                                    
+                                    5
+                                    
+                                </a>
+                            </li>
+                            
+                            <li>
+                                <a href="/pages/forms/?page_num=6&per_page=100">
+                                    
+                                    6
+                                    
+                                </a>
+                            </li>
+                            
+                            
+                            <li>
+                                <a href="/pages/forms/?page_num=2&per_page=100" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                            
+                        </ul>
+                    </div><!--.col-->
+                    <div class="col-md-1" style="padding:20px 0">
+                        <strong>Per Page</strong>
+                    </div>
+                    <div class="col-md-1" style="padding:20px 0">
+                        <select class="form-control col-md-3" id="per_page">
+                            <option value="25" >25</option>
+                            <option value="50" >50</option>
+                            <option value="100" selected>100</option>
+                        </select>
+                    </div><!--.col-->
+                </div><!--.row.pagination-area-->
+
+
+            </div><!--.container-->
+        </section>
+
+    </div><!--#page-->
+
+
+    <section id="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center text-muted">
+                    Lessons and Videos &copy; Hartley Brody 2023
+                </div><!--.col-->
+            </div><!--.row-->
+        </div><!--.container-->
+    </section>
+  </body>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha256-Sk3nkD6mLTMOF0EOpNtsIry+s1CsaqQC1rVLTAy+0yc= sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+
+  
+    <script type="text/javascript">
+        $(document).ready( function(){
+            $("#per_page").change(function(){
+                prot = document.location.protocol
+                host = 'www.scrapethissite.com'
+                path = document.location.pathname
+                args = {
+                    "per_page": $("#per_page").val(),
+                }
+                search_val = $("#q").val()
+                if (search_val){
+                    args["q"] = search_val;
+                }
+                document.location = prot + '//' + host + path + '?' + $.param(args);
+            })
+        });
+    </script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pnotify/2.1.0/pnotify.core.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/pnotify/2.1.0/pnotify.core.min.css" rel="stylesheet" type="text/css">
+
+  <!-- pnotify messages -->
+  <script type="text/javascript">
+    
+    PNotify.prototype.options.styling = "bootstrap3";
+    $(function(){
+      
+    });
+    
+
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
+  </script>
+
+  <!-- golbal video controls -->
+  <script type="text/javascript">
+    $("video").hover(function() {
+        $(this).prop("controls", true);
+    }, function() {
+        $(this).prop("controls", false);
+    });
+
+    $("video").click(function() {
+        if( this.paused){
+            this.play();
+        }
+        else {
+            this.pause();
+        }
+    });
+    </script>
+
+  <!-- insert google analytics here -->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-41551755-8', 'auto');
+    ga('send', 'pageview');
+  </script>
+
+  <!-- Facebook Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+
+  fbq('init', '764287443701341');
+  fbq('track', "PageView");</script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=764287443701341&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Facebook Pixel Code -->
+
+  <!-- Google Code for Remarketing Tag -->
+  <script type="text/javascript">
+    /* <![CDATA[ */
+    var google_conversion_id = 950945448;
+    var google_custom_params = window.google_tag_params;
+    var google_remarketing_only = true;
+    /* ]]> */
+    </script>
+    <script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+    </script>
+    <noscript>
+    <div style="display:inline;">
+    <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/950945448/?guid=ON&amp;script=0"/>
+    </div>
+  </noscript>
+
+  <!-- Global site tag (gtag.js) - Google AdWords: 950945448 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-950945448"></script>
+  <script>
+   window.dataLayer = window.dataLayer || [];
+   function gtag(){dataLayer.push(arguments);}
+   gtag('js', new Date());
+
+   gtag('config', 'AW-950945448');
+  </script>
+
+</html>

@@ -6,4 +6,4 @@ hockey teams from https://www.scrapethissite.com/pages/forms/?page_num=1&per_pag
 It uses [scrapemate web scraping framework](https://github.com/gosom/scrapemate)
 
 
-Read the [how to scrape using Golang and scrapemate][https://blog.gkomninos.com/golang-web-scraping-using-scrapemate]
+Read the [how to scrape using Golang and scrapemate](https://blog.gkomninos.com/golang-web-scraping-using-scrapemate)
